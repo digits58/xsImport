@@ -1,4 +1,4 @@
-//// Exposure Sheet Import.jsx
+//// ExposureSheetImport.jsx
 
 /// Imports Footage with the Toei Digital Timesheet file format v7 (*.xdts)
 
