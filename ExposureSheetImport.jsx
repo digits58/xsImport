@@ -16,13 +16,14 @@
 //     v0.0.4 - 2023/01/12:
 //     Fixed a bug with missing folders and ignore desktop.ini
 //
-//     v0.0.5 - 2023/03/XX:
-//     ?
+//     v0.0.5 - 2023/07/21:
+//     Default to numeric image filename importing and add option to force
+//     alphabetical
 //
 
-var VERSION = "0.0.4";
-var LAST_COMMIT = "55f0d80";
-var COMMIT_DATE = "2023/01/12";
+var VERSION = "0.0.5";
+var LAST_COMMIT = "";
+var COMMIT_DATE = "2023/07/21";
 
 // MIT License
 //
@@ -159,6 +160,10 @@ var COMMIT_DATE = "2023/01/12";
     timelineList.selection = 0;
     timelineList.alignment = ["fill", "center"];
 
+    var alphaOrderCheckbox = group1.add("checkbox", undefined, undefined, {name: "alphaOrderCheckbox"}); 
+    alphaOrderCheckbox.helpTip = "After Effects imports by numeric naming order, this option forces alphabetical order"; 
+    alphaOrderCheckbox.text = "Alphabetical Filenames";
+  
     var divider1 = group1.add("panel", undefined, undefined, { name: "divider1" });
     divider1.alignment = "fill";
 
@@ -228,7 +233,7 @@ var COMMIT_DATE = "2023/01/12";
           var folder = new Folder(mainWindow.xdts.folder.absoluteURI);
           folder.changePath(trackName);
 
-          var footageItem = importFootage(folder.absoluteURI);
+          var footageItem = importFootage(folder.absoluteURI, mainWindow.group1.alphaOrderCheckbox.value);
           if (footageItem == undefined) return;
           footageItem.name = trackName;
           footageItem.parentFolder = folderItem;
@@ -407,7 +412,7 @@ var COMMIT_DATE = "2023/01/12";
       xdtsFile.close();
     }
   }
-  function importFootage(folderPath) {
+  function importFootage(folderPath, forceAlphabetical) {
     var importOptions = new ImportOptions();
     try {
       var files = new Folder(folderPath).getFiles();
@@ -416,7 +421,7 @@ var COMMIT_DATE = "2023/01/12";
       importOptions.file = (files[0].name.substring(files[0].name.length - 4) != ".ini") ? files[0] : files[1];
       importOptions.importAs = ImportAsType.FOOTAGE;
       importOptions.sequence = true;
-      importOptions.forceAlphabetical = true;
+      importOptions.forceAlphabetical = forceAlphabetical;
 
       var footageItem = app.project.importFile(importOptions);
       footageItem.mainSource.conformFrameRate = frameRate;
