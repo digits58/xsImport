@@ -22,7 +22,7 @@
 //
 
 var VERSION = "0.0.5";
-var LAST_COMMIT = "";
+var LAST_COMMIT = "3e19119";
 var COMMIT_DATE = "2023/07/21";
 
 // MIT License
