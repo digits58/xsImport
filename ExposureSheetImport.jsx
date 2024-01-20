@@ -24,7 +24,7 @@
 //     Fix bug with reading xdts files on Japanese locales due to SJIS
 
 var VERSION = "0.0.6";
-var LAST_COMMIT = "";
+var LAST_COMMIT = "5e56a0e";
 var COMMIT_DATE = "2024/01/19";
 
 // MIT License
