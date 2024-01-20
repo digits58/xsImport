@@ -19,15 +19,17 @@
 //     v0.0.5 - 2023/07/21:
 //     Default to numeric image filename importing and add option to force
 //     alphabetical
-//
 
-var VERSION = "0.0.5";
-var LAST_COMMIT = "3e19119";
-var COMMIT_DATE = "2023/07/21";
+//     v0.0.6 - 2024/01/19:
+//     Fix bug with reading xdts files on Japanese locales due to SJIS
+
+var VERSION = "0.0.6";
+var LAST_COMMIT = "";
+var COMMIT_DATE = "2024/01/19";
 
 // MIT License
 //
-// Copyright (c) 2023, 58 <digits58 at gmail dot com>
+// Copyright (c) 2024, 58 <digits58 at gmail dot com>
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -394,13 +396,16 @@ var COMMIT_DATE = "2023/07/21";
       if (xdtsFile == null) throw 'No file';
 
       xdtsFile.open('r');
+      xdtsFile.encoding = 'UTF-8';
 
       if (!xdtsFile.exists) throw "File does not exist";
       // kinda inefficient to split and rejoin later but avoids a bug with reading
       // files line by line
       var contents = xdtsFile.read().split('\n');
       if (contents[0] != "exchangeDigitalTimeSheet Save Data") {
-        throw "Invalid XDTS file";
+        throw "Invalid XDTS file with header: \n" 
+            + "-------------------------------\n"
+            + contents[0];
       }
 
       var xdts;
