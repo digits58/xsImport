@@ -27,8 +27,8 @@
 //     Include json2.js for versions of After Effects without it
 
 var VERSION = "0.0.7";
-var LAST_COMMIT = "a46419c";
-var COMMIT_DATE = "2024/01/20";
+var LAST_COMMIT = "0678418";
+var COMMIT_DATE = "2024/01/21";
 
 // MIT License
 //
