@@ -31,7 +31,7 @@
 //     Time Remap numbers will not align with the exported frame number
 
 var VERSION = "0.0.8";
-var LAST_COMMIT = "";
+var LAST_COMMIT = "ecd01b7";
 var COMMIT_DATE = "2024/03/29";
 
 // MIT License
