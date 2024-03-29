@@ -26,9 +26,13 @@
 //     v0.0.7 - 2024/01/20:
 //     Include json2.js for versions of After Effects without it
 
-var VERSION = "0.0.7";
-var LAST_COMMIT = "0678418";
-var COMMIT_DATE = "2024/01/21";
+//     v0.0.8 - 2024/03/29:
+//     Fix bug for sequence of frames that does not start with one Note the 
+//     Time Remap numbers will not align with the exported frame number
+
+var VERSION = "0.0.8";
+var LAST_COMMIT = "";
+var COMMIT_DATE = "2024/03/29";
 
 // MIT License
 //
@@ -691,10 +695,10 @@ if (typeof JSON !== "object") {
     timelineList.selection = 0;
     timelineList.alignment = ["fill", "center"];
 
-    var alphaOrderCheckbox = group1.add("checkbox", undefined, undefined, {name: "alphaOrderCheckbox"}); 
-    alphaOrderCheckbox.helpTip = "After Effects imports by numeric naming order, this option forces alphabetical order"; 
+    var alphaOrderCheckbox = group1.add("checkbox", undefined, undefined, { name: "alphaOrderCheckbox" });
+    alphaOrderCheckbox.helpTip = "After Effects imports by numeric naming order, this option forces alphabetical order";
     alphaOrderCheckbox.text = "Alphabetical Filenames";
-  
+
     var divider1 = group1.add("panel", undefined, undefined, { name: "divider1" });
     divider1.alignment = "fill";
 
@@ -743,7 +747,7 @@ if (typeof JSON !== "object") {
         if (celField == undefined) throw "Problem parsing cel field";
 
         var totalFrames = timeline["duration"];
-        var duration = frameTime*totalFrames;
+        var duration = frameTime * totalFrames;
         var compItem = app.project.items.addComp(timeline["name"], frameWidth, frameHeight, 1.0, duration, frameRate);
         compItem.bgColor = [1.0, 1.0, 1.0];
         mainWindow.compItem = compItem;
@@ -757,7 +761,7 @@ if (typeof JSON !== "object") {
           // checks if no frame or only null frame
           if (track["frames"].length == 0) return;
           if (track["frames"].length == 1) {
-            var frame = track["frames"][0]["data"].find(function (d) {return d["id"] == 0;})["values"][0]-1;
+            var frame = track["frames"][0]["data"].find(function (d) { return d["id"] == 0; })["values"][0] - 1;
             if (isNaN(frame)) return;
           }
 
@@ -772,17 +776,27 @@ if (typeof JSON !== "object") {
           if (mainWindow.footageResolutions.find(function (res) {
             return res["width"] == footageItem.width && res["height"] == footageItem.height;
           }) == undefined) {
-            mainWindow.footageResolutions.push({"width": footageItem.width, "height": footageItem.height});
+            mainWindow.footageResolutions.push({ "width": footageItem.width, "height": footageItem.height });
           };
           var avLayer = addFootage(compItem, footageItem);
+          var firstFrame = true;
+          var frameOffset = 0;
           track["frames"].forEach(function (frame) {
-            var inputFrame = frame["data"].find(function (d) { return d["id"] == 0; })["values"][0]-1;
+            var inputFrame = frame["data"].find(function (d) { return d["id"] == 0; })["values"][0] - 1;
             var outputFrame = frame["frame"];
-            if (!isNaN(inputFrame)) remapFrame(avLayer, inputFrame, outputFrame);
+            if (!isNaN(inputFrame)) {
+              if (firstFrame) {
+                // offset the inputFrame if the sequence doesn't start at 1
+                // A5.tga, A6.tga, A7.tga --> avLayer 1, 2, 3 for the purposes of remapping
+                frameOffset = inputFrame;
+                firstFrame = false;
+              }
+              remapFrame(avLayer, inputFrame - frameOffset, outputFrame);
+            }
           });
           avLayer.inPoint = avLayer.timeRemap.keyTime(1);
-          var lastFrame = track["frames"][track["frames"].length-1];
-          if (isNaN(lastFrame["data"][0]["values"][0]-1)) {
+          var lastFrame = track["frames"][track["frames"].length - 1];
+          if (isNaN(lastFrame["data"][0]["values"][0] - 1)) {
             avLayer.outPoint = track["frames"][track["frames"].length - 1]["frame"] * frameTime; // set the duration
           } else {
             avLayer.outPoint = duration;
@@ -932,15 +946,15 @@ if (typeof JSON !== "object") {
       // files line by line
       var contents = xdtsFile.read().split('\n');
       if (contents[0] != "exchangeDigitalTimeSheet Save Data") {
-        throw "Invalid XDTS file with header: \n" 
-            + "-------------------------------\n"
-            + contents[0];
+        throw "Invalid XDTS file with header: \n"
+        + "-------------------------------\n"
+        + contents[0];
       }
 
       var xdts;
       xdts = JSON.parse(contents.slice(1).join('\n'));
       return xdts;
-    } catch(e) {
+    } catch (e) {
       alert(e, "Error", true);
     } finally {
       xdtsFile.close();
@@ -960,7 +974,7 @@ if (typeof JSON !== "object") {
       var footageItem = app.project.importFile(importOptions);
       footageItem.mainSource.conformFrameRate = frameRate;
       return footageItem;
-    } catch(e) {
+    } catch (e) {
       return undefined;
     }
   }
