@@ -25,3 +25,6 @@ Find the releases on the sidebar on the right or visit [Releases](https://github
 4. The timeline information from the xdts file is then used to time remap all the frames
 ## License
 Project under MIT License
+
+## Special Thanks
+[GreenBlueClouds](https://greenblueclouds.tumblr.com)

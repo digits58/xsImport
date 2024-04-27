@@ -3,7 +3,7 @@
 /// Imports Footage with the Toei Digital Timesheet file format v7 (*.xdts)
 
 // Author: 58 <digits58 at gmail dot com>
-// Homepage:
+// Special Thanks: GreenBlueClouds <https://greenblueclouds.tumblr.com>
 // Changelog:
 //     v0.0.1 - 2022/09/22: Initial release
 //
@@ -57,7 +57,7 @@
 // SOFTWARE.
 
 var VERSION = "0.0.9";
-var LAST_COMMIT = "";
+var LAST_COMMIT = "80172a8";
 var COMMIT_DATE = "2024/04/29";
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -708,8 +708,8 @@ if (typeof JSON !== "object") {
     divider1.alignment = "fill";
 
     var importAsCheckbox = group1.add("checkbox", undefined, undefined, { name: "importAsCheckbox" });
-    importAsCheckbox.helpTip = "This option renames the timeline being imported";
-    importAsCheckbox.text = "Import XDTS Timeline as";
+    importAsCheckbox.helpTip = "Renames the XDTS timeline being imported to what's provided below";
+    importAsCheckbox.text = "Rename Import as";
 
     var importAsText = group1.add('edittext {properties: {name: "importAsText"}}');
     importAsText.enabled = false;
