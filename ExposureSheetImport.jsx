@@ -60,8 +60,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-var VERSION = "0.0.9";
-var LAST_COMMIT = "";
+var VERSION = "0.0.10";
+var LAST_COMMIT = "e49c001";
 var COMMIT_DATE = "2024/04/29";
 
 ////////////////////////////////////////////////////////////////////////////////
