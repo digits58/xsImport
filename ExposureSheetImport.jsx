@@ -25,14 +25,15 @@
 //
 //     v0.0.7 - 2024/01/20:
 //     Include json2.js for versions of After Effects without it
-
+//
 //     v0.0.8 - 2024/03/29:
-//     Fix bug for sequence of frames that does not start with one Note the 
-//     Time Remap numbers will not align with the exported frame number
-
-var VERSION = "0.0.8";
-var LAST_COMMIT = "ecd01b7";
-var COMMIT_DATE = "2024/03/29";
+//     Fix bug for sequence of frames that does not start with one
+//     Note the Time Remap numbers will not align with the exported
+//     frame number
+//
+//     v0.0.9 - 2024/04/26:
+//     Add new feature to allow renaming the timeline for import as
+//
 
 // MIT License
 //
@@ -55,8 +56,18 @@ var COMMIT_DATE = "2024/03/29";
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-//  json2.js
-//  2023-05-10
+var VERSION = "0.0.9";
+var LAST_COMMIT = "";
+var COMMIT_DATE = "2024/04/29";
+
+////////////////////////////////////////////////////////////////////////////////
+//  json2.js - imported library
+//
+//  URL: https://github.com/douglascrockford/JSON-js
+//  Commit: 7e83f38
+//  Date: 2023-05-10
+//
+
 //  The following creates a global JSON object containing two methods:
 //  stringify and parse. This provides the ES5 JSON capability to ES3
 //  systems. If a project might run on IE8 or earlier, then this
@@ -186,9 +197,6 @@ var COMMIT_DATE = "2024/03/29";
 //                  return value;
 //              }
 //          );
-
-//  This is a reference implementation. You are free to copy, modify, or
-//  redistribute.
 
 /*jslint
     eval, for, this
@@ -579,7 +587,8 @@ if (typeof JSON !== "object") {
     };
   }
 }());
-
+// json2.js
+////////////////////////////////////////////////////////////////////////////////
 {
   // ExtendScript implements the JavaScript language according to the ECMA-262
   // specification. The After Effects scripting engine supports the 3rd Edition
@@ -695,12 +704,23 @@ if (typeof JSON !== "object") {
     timelineList.selection = 0;
     timelineList.alignment = ["fill", "center"];
 
+    var divider1 = group1.add("panel", undefined, undefined, { name: "divider1" });
+    divider1.alignment = "fill";
+
+    var importAsCheckbox = group1.add("checkbox", undefined, undefined, { name: "importAsCheckbox" });
+    importAsCheckbox.helpTip = "This option renames the timeline being imported";
+    importAsCheckbox.text = "Import XDTS Timeline as";
+
+    var importAsText = group1.add('edittext {properties: {name: "importAsText"}}');
+    importAsText.enabled = false;
+    importAsText.text = "";
+
     var alphaOrderCheckbox = group1.add("checkbox", undefined, undefined, { name: "alphaOrderCheckbox" });
     alphaOrderCheckbox.helpTip = "After Effects imports by numeric naming order, this option forces alphabetical order";
     alphaOrderCheckbox.text = "Alphabetical Filenames";
 
-    var divider1 = group1.add("panel", undefined, undefined, { name: "divider1" });
-    divider1.alignment = "fill";
+    var divider2 = group1.add("panel", undefined, undefined, { name: "divider2" });
+    divider2.alignment = "fill";
 
     // GROUP2
     // ======
@@ -746,12 +766,16 @@ if (typeof JSON !== "object") {
         });
         if (celField == undefined) throw "Problem parsing cel field";
 
+        var timelineName = timeline["name"];
+        if(importAsCheckbox.value) {
+          timelineName = importAsText.text;
+        }
         var totalFrames = timeline["duration"];
         var duration = frameTime * totalFrames;
-        var compItem = app.project.items.addComp(timeline["name"], frameWidth, frameHeight, 1.0, duration, frameRate);
+        var compItem = app.project.items.addComp(timelineName, frameWidth, frameHeight, 1.0, duration, frameRate);
         compItem.bgColor = [1.0, 1.0, 1.0];
         mainWindow.compItem = compItem;
-        var folderItem = app.project.items.addFolder(timeline["name"]);
+        var folderItem = app.project.items.addFolder(timelineName);
         mainWindow.footageResolutions = [];
 
         celField["tracks"].forEach(function (track) {
@@ -840,11 +864,15 @@ if (typeof JSON !== "object") {
       }
     };
 
+    importAsCheckbox.onClick = function () {
+      importAsText.enabled = importAsCheckbox.value;
+    };
+
     return mainWindow;
   }
 
   function createCompWindow() {
-    /*
+  /*
   Code for Import https://scriptui.joonas.me — (Triple click to select):
   {"items":{"item-0":{"id":0,"type":"Dialog","parentId":false,"style":{"enabled":true,"varName":"compWindow","windowType":"Dialog","creationProps":{"su1PanelCoordinates":false,"maximizeButton":false,"minimizeButton":false,"independent":false,"closeButton":true,"borderless":false,"resizeable":false},"text":"XdtsImport","preferredSize":[0,0],"margins":16,"orientation":"column","spacing":10,"alignChildren":["fill","top"]}},"item-2":{"id":2,"type":"Group","parentId":28,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"row","spacing":10,"alignChildren":["center","center"],"alignment":null}},"item-3":{"id":3,"type":"Button","parentId":2,"style":{"enabled":false,"varName":"confirmBtn","text":"Confirm","justify":"center","preferredSize":[0,0],"alignment":null,"helpTip":null}},"item-4":{"id":4,"type":"Button","parentId":2,"style":{"enabled":true,"varName":"cancelBtn","text":"Cancel","justify":"center","preferredSize":[0,0],"alignment":null,"helpTip":null}},"item-5":{"id":5,"type":"Divider","parentId":28,"style":{"enabled":true,"varName":null}},"item-23":{"id":23,"type":"Image","parentId":25,"style":{"enabled":true,"varName":"logoImage","image":[""],"alignment":null,"helpTip":""}},"item-25":{"id":25,"type":"Panel","parentId":0,"style":{"enabled":true,"varName":"aboutPanel","creationProps":{"borderStyle":"etched","su1PanelCoordinates":false},"text":"About","preferredSize":[0,0],"margins":5,"orientation":"row","spacing":10,"alignChildren":["left","center"],"alignment":null}},"item-27":{"id":27,"type":"StaticText","parentId":25,"style":{"enabled":true,"varName":"versionText","creationProps":{},"softWrap":false,"text":"version: 0.0.1\nlast commit:\ncommit date:","justify":"left","preferredSize":[0,0],"alignment":null,"helpTip":null}},"item-28":{"id":28,"type":"Group","parentId":0,"style":{"enabled":true,"varName":null,"preferredSize":[0,0],"margins":0,"orientation":"column","spacing":10,"alignChildren":["fill","center"],"alignment":null}},"item-29":{"id":29,"type":"ListBox","parentId":28,"style":{"enabled":true,"varName":"resolutionList","creationProps":{"multiselect":false,"numberOfColumns":1,"columnWidths":"[]","columnTitles":"[]","showHeaders":false},"listItems":"","preferredSize":[0,0],"alignment":null,"helpTip":null}}},"order":[0,25,23,27,28,29,5,2,3,4],"settings":{"importJSON":true,"indentSize":false,"cepExport":false,"includeCSSJS":true,"showDialog":true,"functionWrapper":false,"afterEffectsDockable":false,"itemReferenceList":"None"},"activeId":0}
   */
@@ -1004,3 +1032,5 @@ if (typeof JSON !== "object") {
   }
   xdtsImport(this);
 }
+
+//// ExposureSheetImport.jsx

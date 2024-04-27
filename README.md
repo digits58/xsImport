@@ -7,6 +7,9 @@ After Effectsスクリプトの機能はXDTSファイルで自動TimeRemapです
 ## Why
 There are difficulties during compositing to take exported animation frames and importing them into AfterEffects with correct timing. Current methods include tedious work to manually time the frames and/or consumes space to avoid it. This provides a solution to both. The script allows the user to read a common file format XDTS for timesheets to automatically import all frames and time them correctly in AfterEffects. It is estimated to save ~24hr of production time for every minute of animation produced and in some cases avoid accumulating 100's of GB from importing with video files instead of image sequences.
 
+## Install / Download
+Find the releases on the sidebar on the right or visit [Releases](https://github.com/digits58/xsImport/releases) to download the latest version `ExposureSheetImport-vX.X.X.jsx`
+
 ## Usage
 ![image](https://user-images.githubusercontent.com/115112505/195144996-5333424f-1a44-4bd8-8f8f-6641ab4203ae.png)
 
