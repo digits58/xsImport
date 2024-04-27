@@ -28,6 +28,14 @@ Find the releases on the sidebar on the right or visit [Releases](https://github
 
 3. Each cell animation layer is imported as image sequences and added to a new composition
 4. The timeline information from the xdts file is then used to time remap all the frames
+
+## Notes
+### Import XDTS Timeline as Option
+By default the script will import the timeline from the XDTS file using the name.  The newly created composition and footage item will use the same name.  Enabling the `Import XDTS Timeline as` option will instead rename the these newly created composition and footage item to whatever is provided. 
+
+### Alphabetical Filenames Option
+The script uses imports frames in numerical order so it frames are imported as A1, A2, A3, ..., etc.  The `Alphabetical Filenames` checkbox option allows the script to import in alphabetical order so A1a, A1b, A2, etc...  However this will only work when there are <=9 keyframes (A1,A2,A3,...,A9).  If the script uses the alphabetical option and there are >9 keyframes, the order will be A1, A10, A2, A2a, A3, ..., A9 instead of A1, A2, A2a, A3, ..., A9, A10 so renaming as A01, A02, A02a, A03, ...., A10 is needed.
+
 ## License
 Project under MIT License
 
