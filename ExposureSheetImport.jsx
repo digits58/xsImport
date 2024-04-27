@@ -34,6 +34,10 @@
 //     v0.0.9 - 2024/04/26:
 //     Add new feature to allow renaming the timeline for import as
 //
+//     v0.0.10 - 2024/04/26:
+//     Mid sequence exposure mark outs (X) are now accounted through
+//     opacity keyframes
+//
 
 // MIT License
 //
@@ -57,7 +61,7 @@
 // SOFTWARE.
 
 var VERSION = "0.0.9";
-var LAST_COMMIT = "80172a8";
+var LAST_COMMIT = "";
 var COMMIT_DATE = "2024/04/29";
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -816,6 +820,11 @@ if (typeof JSON !== "object") {
                 firstFrame = false;
               }
               remapFrame(avLayer, inputFrame - frameOffset, outputFrame);
+            } else if(frame["data"].find(function (d) { return d["id"] == 0; })["values"][0] == "SYMBOL_NULL_CELL") {
+              // setting opacity keyframe 0% on NULL CELL
+              var opacityKey = avLayer.transform.opacity.addKey(frameTime * outputFrame);
+              avLayer.transform.opacity.setValueAtKey(opacityKey, 0);
+              avLayer.transform.opacity.setInterpolationTypeAtKey(opacityKey, KeyframeInterpolationType.HOLD);
             }
           });
           avLayer.inPoint = avLayer.timeRemap.keyTime(1);
@@ -1029,6 +1038,10 @@ if (typeof JSON !== "object") {
       layer.timeRemap.removeKey(1);
     }
     layer.firstFrameSet = true;
+
+    var opacityKey = layer.transform.opacity.addKey(frameTime * outputFrame);
+    layer.transform.opacity.setValueAtKey(opacityKey, 100);
+    layer.transform.opacity.setInterpolationTypeAtKey(opacityKey, KeyframeInterpolationType.HOLD);
   }
   xdtsImport(this);
 }
