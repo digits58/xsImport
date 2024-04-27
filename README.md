@@ -12,6 +12,9 @@ Find the releases on the sidebar on the right or visit [Releases](https://github
 
 ![image](https://github.com/digits58/xsImport/assets/115112505/ca2c8485-0047-46f5-a61f-e2770dd8617b)
 
+![image](https://github.com/digits58/xsImport/assets/115112505/1790d588-86b0-41d4-8548-c204a9df03c0)
+
+
 ## Usage
 ![image](https://user-images.githubusercontent.com/115112505/195144996-5333424f-1a44-4bd8-8f8f-6641ab4203ae.png)
 
