@@ -36,6 +36,10 @@ By default the script will import the timeline from the XDTS file using the name
 ### Alphabetical Filenames Option
 The script uses imports frames in numerical order so it frames are imported as A1, A2, A3, ..., etc.  The `Alphabetical Filenames` checkbox option allows the script to import in alphabetical order so A1a, A1b, A2, etc...  However this will only work when there are <=9 keyframes (A1,A2,A3,...,A9).  If the script uses the alphabetical option and there are >9 keyframes, the order will be A1, A10, A2, A2a, A3, ..., A9 instead of A1, A2, A2a, A3, ..., A9, A10 so renaming as A01, A02, A02a, A03, ...., A10 is needed.
 
+### Start Frame Offset Option
+This option allows offsetting the start frame being displayed in the new composition by whatever value provided. This is typically set in the project settings but this option allows offsetting it with any value within the composition. Here's an example of offsetting the start frame to 5.
+![image](https://github.com/digits58/xsImport/assets/115112505/c62a7bef-4dba-4dda-8cc4-fd6117ab6ae6)
+
 ### Frame Mark Out Behaviour
 XDTS allows "marking out" a frame/cel which corresponds to the `X` on an xsheet so that it becomes hidden.  The script accounts for this by using Opacity keyframes set to 0% when the frame/cel is marked out and the 100% on the next exposure.
 
