@@ -38,6 +38,9 @@
 //     Mid sequence exposure mark outs (X) are now accounted through
 //     opacity keyframes
 //
+//     v0.0.11 - 2024/05/05:
+//     Add feature to offset the start frame display
+//
 
 // MIT License
 //
@@ -60,9 +63,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-var VERSION = "0.0.10";
-var LAST_COMMIT = "e49c001";
-var COMMIT_DATE = "2024/04/29";
+var VERSION = "";
+var LAST_COMMIT = "";
+var COMMIT_DATE = "";
 
 ////////////////////////////////////////////////////////////////////////////////
 //  json2.js - imported library
@@ -719,6 +722,14 @@ if (typeof JSON !== "object") {
     importAsText.enabled = false;
     importAsText.text = "";
 
+    var startFrameOffsetCheckbox = group1.add("checkbox", undefined, undefined, { name: "startFrameOffsetCheckbox" });
+    startFrameOffsetCheckbox.helpTip = "Offsets the start frame for the precomp by the provided value";
+    startFrameOffsetCheckbox.text = "Start Frame Offset";
+
+    var startFrameOffsetText = group1.add('edittext {properties: {name: "startFrameOffsetText"}}');
+    startFrameOffsetText.enabled = false;
+    startFrameOffsetText.text = "1";
+
     var alphaOrderCheckbox = group1.add("checkbox", undefined, undefined, { name: "alphaOrderCheckbox" });
     alphaOrderCheckbox.helpTip = "After Effects imports by numeric naming order, this option forces alphabetical order";
     alphaOrderCheckbox.text = "Alphabetical Filenames";
@@ -777,6 +788,9 @@ if (typeof JSON !== "object") {
         var totalFrames = timeline["duration"];
         var duration = frameTime * totalFrames;
         var compItem = app.project.items.addComp(timelineName, frameWidth, frameHeight, 1.0, duration, frameRate);
+        if (startFrameOffsetCheckbox.value) {
+          compItem.displayStartFrame += parseInt(startFrameOffsetText.text);
+        }
         compItem.bgColor = [1.0, 1.0, 1.0];
         mainWindow.compItem = compItem;
         var folderItem = app.project.items.addFolder(timelineName);
@@ -875,6 +889,10 @@ if (typeof JSON !== "object") {
 
     importAsCheckbox.onClick = function () {
       importAsText.enabled = importAsCheckbox.value;
+    };
+
+    startFrameOffsetCheckbox.onClick = function () {
+      startFrameOffsetText.enabled = startFrameOffsetCheckbox.value;
     };
 
     return mainWindow;
