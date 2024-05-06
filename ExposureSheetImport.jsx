@@ -63,9 +63,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-var VERSION = "";
-var LAST_COMMIT = "";
-var COMMIT_DATE = "";
+var VERSION = "0.0.11";
+var LAST_COMMIT = "8eb02da";
+var COMMIT_DATE = "2024/05/05";
 
 ////////////////////////////////////////////////////////////////////////////////
 //  json2.js - imported library
