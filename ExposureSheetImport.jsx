@@ -41,6 +41,9 @@
 //     v0.0.11 - 2024/05/05:
 //     Add feature to offset the start frame display
 //
+//     v0.0.12 - 2024/06/02:
+//     Display filename for the opened xdts file
+//
 
 // MIT License
 //
@@ -63,9 +66,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-var VERSION = "0.0.11";
-var LAST_COMMIT = "8eb02da";
-var COMMIT_DATE = "2024/05/05";
+var VERSION = "0.0.12";
+var LAST_COMMIT = "06e62b0";
+var COMMIT_DATE = "2024/06/02";
 
 ////////////////////////////////////////////////////////////////////////////////
 //  json2.js - imported library
