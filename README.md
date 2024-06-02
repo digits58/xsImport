@@ -11,7 +11,7 @@ There are difficulties during compositing to take exported animation frames and 
 Find the releases on the sidebar on the right or visit [Releases](https://github.com/digits58/xsImport/releases) to download the latest version `ExposureSheetImport-vX.X.X.jsx`
 
 ![image](https://github.com/digits58/xsImport/assets/115112505/ca2c8485-0047-46f5-a61f-e2770dd8617b)
-
+![image](https://github.com/digits58/xsImport/assets/115112505/d1fded88-2e57-463e-9c1d-2bfcbcb9b32e)
 ![image](https://github.com/digits58/xsImport/assets/115112505/1790d588-86b0-41d4-8548-c204a9df03c0)
 
 
