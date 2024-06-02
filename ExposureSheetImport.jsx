@@ -705,6 +705,8 @@ if (typeof JSON !== "object") {
     var openBtn = group1.add("button", undefined, undefined, { name: "openBtn" });
     openBtn.text = "Open XDTS";
 
+    var filePathText = group1.add("statictext", undefined, "unopened");
+
     var timelineList_array = ["Timeline"];
     var timelineList = group1.add("dropdownlist", undefined, undefined, { name: "timelineList", items: timelineList_array });
     timelineList.enabled = false;
@@ -753,7 +755,7 @@ if (typeof JSON !== "object") {
     cancelBtn.text = "Cancel";
 
     mainWindow.group1.openBtn.onClick = function () {
-      var xdts = openXdtsFile();
+      var xdts = openXdtsFile(filePathText);
       if (xdts == undefined) return;
 
       mainWindow.group1.timelineList.removeAll();
@@ -965,11 +967,12 @@ if (typeof JSON !== "object") {
     return compWindow;
   }
 
-  function openXdtsFile() {
+  function openXdtsFile(filePathText) {
     var xdtsFile = new File(".").openDlg("Import XDTS...", "*.xdts", false);
     if (xdtsFile == null) return;
     var xdts = parseXdtsFile(xdtsFile.absoluteURI);
     xdts.folder = xdtsFile.parent;
+    filePathText.text = xdtsFile.absoluteURI;
     return xdts;
   }
 
