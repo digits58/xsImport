@@ -44,6 +44,9 @@
 //     v0.0.12 - 2024/06/02:
 //     Display filename for the opened xdts file
 //
+//     v0.0.13 - 2024/12/23:
+//     Rename the option for start frame offset
+//
 
 // MIT License
 //
@@ -66,9 +69,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-var VERSION = "0.0.12";
-var LAST_COMMIT = "06e62b0";
-var COMMIT_DATE = "2024/06/02";
+var VERSION = "0.0.13";
+var LAST_COMMIT = "";
+var COMMIT_DATE = "2024/12/23";
 
 ////////////////////////////////////////////////////////////////////////////////
 //  json2.js - imported library
@@ -729,7 +732,7 @@ if (typeof JSON !== "object") {
 
     var startFrameOffsetCheckbox = group1.add("checkbox", undefined, undefined, { name: "startFrameOffsetCheckbox" });
     startFrameOffsetCheckbox.helpTip = "Offsets the start frame for the precomp by the provided value";
-    startFrameOffsetCheckbox.text = "Start Frame Offset";
+    startFrameOffsetCheckbox.text = "Add/Subtract Start Frame by";
 
     var startFrameOffsetText = group1.add('edittext {properties: {name: "startFrameOffsetText"}}');
     startFrameOffsetText.enabled = false;
