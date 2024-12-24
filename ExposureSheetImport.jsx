@@ -70,7 +70,7 @@
 // SOFTWARE.
 
 var VERSION = "0.0.13";
-var LAST_COMMIT = "";
+var LAST_COMMIT = "64aaa16";
 var COMMIT_DATE = "2024/12/23";
 
 ////////////////////////////////////////////////////////////////////////////////
