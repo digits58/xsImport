@@ -47,6 +47,9 @@
 //     v0.0.13 - 2024/12/23:
 //     Rename the option for start frame offset
 //
+//     v0.0.14 - 2025/08/27:
+//     Use Blend effects layer with expression for marking out frames
+//
 
 // MIT License
 //
@@ -69,9 +72,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-var VERSION = "0.0.13";
-var LAST_COMMIT = "64aaa16";
-var COMMIT_DATE = "2024/12/23";
+var VERSION = "0.0.14";
+var LAST_COMMIT = "";
+var COMMIT_DATE = "2025/09/01";
 
 ////////////////////////////////////////////////////////////////////////////////
 //  json2.js - imported library
@@ -829,6 +832,8 @@ if (typeof JSON !== "object") {
             mainWindow.footageResolutions.push({ "width": footageItem.width, "height": footageItem.height });
           };
           var avLayer = addFootage(compItem, footageItem);
+          avLayer.Effects.addProperty("Blend"); // Add Blend Layer
+
           var firstFrame = true;
           var frameOffset = 0;
           track["frames"].forEach(function (frame) {
@@ -844,9 +849,26 @@ if (typeof JSON !== "object") {
               remapFrame(avLayer, inputFrame - frameOffset, outputFrame);
             } else if(frame["data"].find(function (d) { return d["id"] == 0; })["values"][0] == "SYMBOL_NULL_CELL") {
               // setting opacity keyframe 0% on NULL CELL
-              var opacityKey = avLayer.transform.opacity.addKey(frameTime * outputFrame);
-              avLayer.transform.opacity.setValueAtKey(opacityKey, 0);
-              avLayer.transform.opacity.setInterpolationTypeAtKey(opacityKey, KeyframeInterpolationType.HOLD);
+              // var opacityKey = avLayer.transform.opacity.addKey(frameTime * outputFrame);
+              // avLayer.transform.opacity.setValueAtKey(opacityKey, 0);
+              // avLayer.transform.opacity.setInterpolationTypeAtKey(opacityKey, KeyframeInterpolationType.HOLD);
+
+              // seting blend keyframe 0% on NULL CELL
+              // if (firstFrame) {
+              //   // offset the inputFrame if the sequence doesn't start at 1
+              //   // A5.tga, A6.tga, A7.tga --> avLayer 1, 2, 3 for the purposes of remapping
+              //   frameOffset = inputFrame;
+              //   firstFrame = false;
+              // }
+              var key = avLayer.timeRemap.addKey(frameTime * outputFrame);
+              avLayer.timeRemap.setValueAtKey(key, footageItem.duration);
+              avLayer.timeRemap.setInterpolationTypeAtKey(key, KeyframeInterpolationType.HOLD);
+              avLayer.Effects.Blend.blendWithOriginal.expression = "(timeRemap >= source.duration) ? 0 : 100;";
+
+              var blendKey = avLayer.Effects.Blend.blendWithOriginal.addKey(frameTime * outputFrame);
+              avLayer.Effects.Blend.blendWithOriginal.setValueAtKey(blendKey, 0);
+              avLayer.Effects.Blend.blendWithOriginal.setInterpolationTypeAtKey(blendKey, KeyframeInterpolationType.HOLD);
+
             }
           });
           avLayer.inPoint = avLayer.timeRemap.keyTime(1);
@@ -1066,9 +1088,13 @@ if (typeof JSON !== "object") {
     }
     layer.firstFrameSet = true;
 
-    var opacityKey = layer.transform.opacity.addKey(frameTime * outputFrame);
-    layer.transform.opacity.setValueAtKey(opacityKey, 100);
-    layer.transform.opacity.setInterpolationTypeAtKey(opacityKey, KeyframeInterpolationType.HOLD);
+    // var opacityKey = layer.transform.opacity.addKey(frameTime * outputFrame);
+    // layer.transform.opacity.setValueAtKey(opacityKey, 100);
+    // layer.transform.opacity.setInterpolationTypeAtKey(opacityKey, KeyframeInterpolationType.HOLD);
+
+    var blendKey = layer.Effects.Blend.blendWithOriginal.addKey(frameTime * outputFrame);
+    layer.Effects.Blend.blendWithOriginal.setValueAtKey(blendKey, 1);
+    layer.Effects.Blend.blendWithOriginal.setInterpolationTypeAtKey(blendKey, KeyframeInterpolationType.HOLD);
   }
   xdtsImport(this);
 }

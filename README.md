@@ -42,7 +42,21 @@ This option allows offsetting the start frame being displayed in the new composi
 
 ## Notes
 ### Frame Mark Out Behaviour
-XDTS allows "marking out" a frame/cel which corresponds to the `X` on an xsheet so that it becomes hidden.  The script accounts for this by using Opacity keyframes set to 0% when the frame/cel is marked out and the 100% on the next exposure.
+XDTS allows "marking out" a frame/cel which corresponds to the `X` on an xsheet so that it becomes hidden.
+
+~~The script accounts for this by using Opacity keyframes set to 0% when the frame/cel is marked out and the 100% on the next exposure.~~
+
+Cel Timing: Frame timing of the imported cel animation is controlled by time remap keyframes.
+
+Holdout Behavior: This behavior is handled by an expression using the “blend” FX with the  “Blend With Original” property (opacity).
+
+The Expression: checks the time remap value of the cel layer. It compares this value to the total number of frames in your source image sequence (e.g., A[00-09].tga).
+
+#### How it Works
+
+If the time remap value is within the frame count (e.g., 0 to 9), the expression sets the Blend With Original property to 100%, meaning the cel is fully visible.
+
+If the time remap value exceeds the frame count (e.g., a value of 10 or more), the expression sets the Blend With Original property to 0%, making the cel completely transparent (a holdout).
 
 ## License
 Project under MIT License
